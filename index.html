@@ -1,0 +1,2766 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enjel & Reza — 26 Maret 2026</title>
+
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"
+    />
+    <link rel="stylesheet" href="countdown/simplyCountdown.theme.default.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Pinyon+Script&family=Lato:wght@100;300;400&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js"></script>
+
+    <style>
+      /* ============================================================
+         TOKENS  —  merah · hitam · putih
+      ============================================================ */
+      :root {
+        --red: #9b2020;
+        --red-v: #c0392b;
+        --red-muted: #7a1a1a;
+        --off-white: #faf6f1; /* section terang */
+        --cream: #f3ede5; /* section tengah */
+        --black: #0f0e0e; /* section gelap */
+        --black-s: #161514;
+        --muted: #907870;
+        --f-display: "Pinyon Script", cursive;
+        --f-serif: "Cinzel", serif;
+        --f-body: "Lato", sans-serif;
+        --tr: 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      }
+
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html {
+        font-size: 62.5%;
+        scroll-behavior: smooth;
+      }
+      body {
+        font-family: var(--f-body);
+        font-size: 1.5rem;
+        background: var(--off-white);
+        color: #2e2b28;
+        overflow-x: hidden;
+      }
+      img {
+        max-width: 100%;
+        display: block;
+      }
+      a {
+        text-decoration: none;
+      }
+      body.locked {
+        overflow: hidden;
+      }
+
+      /* ============================================================
+         UTILITY
+      ============================================================ */
+      .sec-label {
+        display: block;
+        font-family: var(--f-body);
+        font-weight: 300;
+        font-size: 1.05rem;
+        letter-spacing: 0.42em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin-bottom: 1rem;
+      }
+      .sec-title {
+        font-family: var(--f-display);
+        font-size: clamp(4.5rem, 7vw, 7.5rem);
+        color: var(--red);
+        font-weight: 400;
+        line-height: 1.05;
+      }
+      .rule {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 1.2rem;
+        margin: 2.6rem auto;
+        width: fit-content;
+      }
+      .rule::before,
+      .rule::after {
+        content: "";
+        display: block;
+        width: 5rem;
+        height: 1px;
+        background: var(--red);
+        opacity: 0.35;
+      }
+      .rule-dot {
+        width: 5px;
+        height: 5px;
+        background: var(--red);
+        opacity: 0.5;
+        transform: rotate(45deg);
+        flex-shrink: 0;
+      }
+
+      /* ============================================================
+         HERO / HIRO
+         — single page, full-height, foto gelap
+         — opening animation sebelum tombol ditekan
+         — floral SVG di sudut kiri & kanan atas
+      ============================================================ */
+      #hiro {
+        position: relative;
+        min-height: 100svh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+      }
+      #hiro .hiro-bg {
+        position: absolute;
+        inset: 0;
+        background-image: url(asset/img/hiro1.jpg);
+        background-size: cover;
+        background-position: center top;
+        filter: brightness(35%);
+        transform: scale(1.05);
+        transition: transform 7s ease;
+        z-index: 0;
+      }
+      #hiro.revealed .hiro-bg {
+        transform: scale(1);
+      }
+      #hiro .hiro-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.08) 0%,
+          rgba(0, 0, 0, 0) 40%,
+          rgba(0, 0, 0, 0.55) 100%
+        );
+        z-index: 1;
+      }
+
+      /* thin corner bracket */
+      .hiro-corner {
+        position: absolute;
+        z-index: 3;
+        pointer-events: none;
+        width: 2.6rem;
+        height: 2.6rem;
+        border-color: rgba(255, 255, 255, 0.25);
+        border-style: solid;
+      }
+      .hiro-corner.tl {
+        top: 2.2rem;
+        left: 2.2rem;
+        border-width: 1px 0 0 1px;
+      }
+      .hiro-corner.tr {
+        top: 2.2rem;
+        right: 2.2rem;
+        border-width: 1px 1px 0 0;
+      }
+      .hiro-corner.bl {
+        bottom: 2.2rem;
+        left: 2.2rem;
+        border-width: 0 0 1px 1px;
+      }
+      .hiro-corner.br {
+        bottom: 2.2rem;
+        right: 2.2rem;
+        border-width: 0 1px 1px 0;
+      }
+
+      /* ── FLORAL SVG CONTAINERS ── */
+      .hiro-floral {
+        position: absolute;
+        z-index: 2;
+        pointer-events: none;
+        opacity: 0; /* animated in after open */
+        width: clamp(18rem, 26vw, 32rem);
+      }
+      .hiro-floral.fl {
+        top: 0;
+        left: 0;
+      }
+      .hiro-floral.fr {
+        top: 0;
+        right: 0;
+        transform: scaleX(-1);
+      }
+      .hiro-floral.bl-f {
+        bottom: 0;
+        left: 0;
+        transform: scaleY(-1);
+        width: clamp(13rem, 18vw, 22rem);
+      }
+      .hiro-floral.br-f {
+        bottom: 0;
+        right: 0;
+        transform: scale(-1, -1);
+        width: clamp(13rem, 18vw, 22rem);
+      }
+
+      /* petals */
+      .petals-container {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 2;
+        overflow: hidden;
+      }
+      .petal {
+        position: absolute;
+        opacity: 0;
+        border-radius: 50% 0 50% 0;
+      }
+
+      /* content */
+      #hiro .hiro-content {
+        position: relative;
+        z-index: 4;
+        color: #fff;
+        padding: 2.4rem;
+        max-width: 66rem;
+      }
+      .hiro-to {
+        font-family: var(--f-serif);
+        font-size: clamp(1rem, 1.4vw, 1.25rem);
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        opacity: 0;
+      }
+      .hiro-invite {
+        margin-bottom: 3.8rem;
+        font-family: var(--f-serif);
+        font-size: clamp(0.5rem, 1.2vw, 1.4rem);
+        color: rgba(255, 255, 255, 0.6);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        opacity: 0;
+      }
+      .hiro-names {
+        font-family: var(--f-display);
+        font-size: clamp(6rem, 15vw, 12rem);
+        color: #fff;
+        line-height: 1;
+        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.25);
+        opacity: 0;
+        margin: 0.8rem 0;
+      }
+      .hiro-date {
+        font-family: var(--f-serif);
+        font-size: clamp(1rem, 1.4vw, 1.25rem);
+        letter-spacing: 0.26em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.55);
+        opacity: 0;
+      }
+      .hiro-line {
+        width: 0;
+        height: 1px;
+        background: rgba(255, 255, 255, 0.28);
+        margin: 2rem auto;
+      }
+      .hiro-btn {
+        display: inline-block;
+        padding: 1.2rem 3.8rem;
+        border: 1px solid rgba(255, 255, 255, 0.45);
+        color: #fff;
+        background: transparent;
+        opacity: 0;
+        cursor: pointer;
+        font-family: var(--f-body);
+        font-weight: 300;
+        font-size: 1.1rem;
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        transition:
+          background var(--tr),
+          border-color var(--tr);
+      }
+      .hiro-btn:hover {
+        background: var(--red);
+        border-color: var(--red);
+      }
+
+      /* ============================================================
+         NAVBAR
+      ============================================================ */
+      .mynav {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .mynav::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        background: rgba(250, 246, 241, 0.9);
+        border-bottom: 1px solid rgba(155, 32, 32, 0.1);
+        z-index: -1;
+      }
+      .mynav .navbar-brand {
+        font-family: var(--f-display);
+        font-size: 2.8rem;
+        color: var(--red);
+        line-height: 1;
+      }
+      .mynav .offcanvas {
+        background: var(--off-white);
+      }
+      .mynav .offcanvas-title {
+        font-family: var(--f-display);
+        font-size: 3rem;
+        color: var(--red);
+      }
+      .mynav .navbar-toggler {
+        border: none;
+      }
+      .mynav .nav-link {
+        font-family: var(--f-body);
+        font-weight: 300;
+        font-size: 1.1rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: #2e2b28 !important;
+        padding: 0.6rem 1.2rem !important;
+        position: relative;
+        transition: color var(--tr);
+      }
+      .mynav .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 1.2rem;
+        right: 1.2rem;
+        height: 1px;
+        background: var(--red);
+        transform: scaleX(0);
+        transition: transform var(--tr);
+      }
+      .mynav .nav-link:hover::after {
+        transform: scaleX(1);
+      }
+
+      /* ============================================================
+         #home  — off-white
+      ============================================================ */
+      #home {
+        background: var(--off-white);
+        padding: 11rem 0 10rem;
+      }
+      #home .home-intro {
+        text-align: center;
+        margin-bottom: 8rem;
+      }
+      #home .home-intro p {
+        font-family: var(--f-serif);
+        font-style: italic;
+        font-size: 1.7rem;
+        color: var(--muted);
+        max-width: 44rem;
+        margin: 2rem auto 0;
+        line-height: 1.9;
+      }
+
+      .simply-countdown {
+        justify-content: center;
+      }
+      .simply-countdown > .simply-section {
+        background: transparent;
+        border: 1px solid rgba(155, 32, 32, 0.22);
+        border-radius: 0.8rem;
+        padding: 3.8rem 3rem;
+        margin: 0.6rem;
+        min-width: 7.5rem;
+        transition:
+          border-color var(--tr),
+          transform var(--tr);
+      }
+      .simply-countdown > .simply-section:hover {
+        border-color: var(--red);
+        transform: translateY(-3px);
+      }
+      .simply-countdown > .simply-section .simply-amount {
+        font-family: var(--f-serif);
+        font-size: 3.2rem;
+        color: var(--red);
+        font-weight: 600;
+        letter-spacing: 0.04em;
+      }
+      .simply-countdown > .simply-section .simply-word {
+        font-family: var(--f-body);
+        font-weight: 200;
+        font-size: 0.95rem;
+        color: var(--muted);
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+      }
+
+      .couple-section {
+        margin-top: 8rem;
+      }
+      .couple-card {
+        display: flex;
+        align-items: center;
+        gap: 2.5rem;
+        padding: 3rem;
+        background: var(--cream);
+        border-radius: 1.6rem;
+        transition:
+          transform var(--tr),
+          box-shadow var(--tr);
+      }
+      .couple-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 18px 44px rgba(155, 32, 32, 0.1);
+      }
+      .couple-card.reverse {
+        flex-direction: row-reverse;
+        text-align: right;
+      }
+      @media (max-width: 768px) {
+        .couple-card,
+        .couple-card.reverse {
+          flex-direction: column;
+          text-align: center;
+        }
+      }
+      .couple-card img {
+        width: 11rem;
+        height: 11rem;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid rgba(155, 32, 32, 0.25);
+        flex-shrink: 0;
+      }
+      .couple-card .couple-info h3 {
+        font-family: var(--f-display);
+        font-size: 3.8rem;
+        color: var(--red);
+        margin-bottom: 0.4rem;
+        line-height: 1.1;
+        font-weight: 400;
+      }
+      .couple-card .couple-info p {
+        font-family: var(--f-serif);
+        font-style: italic;
+        font-size: 1.45rem;
+        color: var(--muted);
+        line-height: 1.85;
+      }
+      .couple-divider {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.4rem;
+        color: var(--red);
+        opacity: 0.7;
+        padding: 1rem 0;
+      }
+
+      /* ============================================================
+         #info  — hitam
+      ============================================================ */
+      #info {
+        background: var(--black);
+        color: #fff;
+        padding: 10rem 0;
+      }
+      #info .sec-label {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      #info .sec-title {
+        color: #e8c0c0;
+      }
+      #info .rule::before,
+      #info .rule::after {
+        background: #c07070;
+      }
+      #info .rule-dot {
+        background: #c07070;
+      }
+      #info h4 {
+        font-family: var(--f-serif);
+        font-size: 2rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 0.8rem;
+      }
+      #info .info-address {
+        font-family: var(--f-serif);
+        font-style: italic;
+        font-size: 1.5rem;
+        color: rgba(255, 255, 255, 0.52);
+        line-height: 1.85;
+        margin: 1.8rem 0;
+      }
+      #info .map-wrapper {
+        border-radius: 1rem;
+        overflow: hidden;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        margin: 2rem 0;
+      }
+      .info-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.7rem;
+        padding: 0.9rem 2.5rem;
+        border: 1px solid rgba(192, 80, 80, 0.45);
+        color: #e8c0c0;
+        border-radius: 0.3rem;
+        font-family: var(--f-body);
+        font-weight: 300;
+        font-size: 1.1rem;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        transition:
+          background var(--tr),
+          color var(--tr);
+      }
+      .info-btn:hover {
+        background: var(--red);
+        color: #fff;
+        border-color: var(--red);
+      }
+      .event-card {
+        background: rgba(255, 255, 255, 0.04);
+        border: 1px solid rgba(255, 255, 255, 0.09);
+        border-radius: 1.4rem;
+        padding: 3.5rem 2.5rem;
+        text-align: center;
+        height: 100%;
+        transition:
+          border-color var(--tr),
+          transform var(--tr);
+      }
+      .event-card:hover {
+        border-color: rgba(192, 80, 80, 0.35);
+        transform: translateY(-3px);
+      }
+      .event-card .event-icon {
+        font-size: 2.2rem;
+        color: #e8c0c0;
+        margin-bottom: 1.4rem;
+        display: block;
+      }
+      .event-card h4 {
+        font-family: var(--f-serif);
+        font-size: 2rem;
+        font-weight: 600;
+        color: #fff;
+        margin-bottom: 1.2rem;
+      }
+      .event-card .event-time {
+        font-family: var(--f-body);
+        font-size: 1.35rem;
+        color: #e8c0c0;
+        margin-bottom: 0.5rem;
+      }
+      .event-card .event-detail {
+        font-family: var(--f-serif);
+        font-style: italic;
+        font-size: 1.35rem;
+        color: rgba(255, 255, 255, 0.48);
+        line-height: 1.7;
+      }
+
+      /* ============================================================
+         #gallery  — cream
+      ============================================================ */
+      #gallery {
+        padding: 10rem 0;
+        background: var(--cream);
+      }
+      .gallery-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 1rem;
+        margin-top: 5rem;
+      }
+      .gallery-item {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 4/5;
+        cursor: pointer;
+        border-radius: 0.6rem;
+      }
+      .gallery-item:first-child {
+        grid-column: span 2;
+        aspect-ratio: 16/9;
+      }
+      .gallery-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition:
+          transform 0.6s ease,
+          filter 0.4s ease;
+        filter: saturate(0.8);
+      }
+      .gallery-item:hover img {
+        transform: scale(1.07);
+        filter: saturate(1);
+      }
+      .gallery-item .gallery-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(155, 32, 32, 0.32);
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 2.2rem;
+        transition: opacity var(--tr);
+      }
+      .gallery-item:hover .gallery-overlay {
+        opacity: 1;
+      }
+
+      /* ============================================================
+         #rsvp  — hitam
+      ============================================================ */
+      #rsvp {
+        padding: 10rem 0;
+        background: var(--black-s);
+        color: #fff;
+      }
+      #rsvp .sec-label {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      #rsvp .sec-title {
+        color: #e8c0c0;
+      }
+      #rsvp .rule::before,
+      #rsvp .rule::after {
+        background: #c07070;
+      }
+      #rsvp .rule-dot {
+        background: #c07070;
+      }
+      #rsvp p {
+        font-family: var(--f-serif);
+        font-style: italic;
+        font-size: 1.55rem;
+        color: rgba(255, 255, 255, 0.48);
+      }
+      .rsvp-form-wrapper {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 1.4rem;
+        padding: 4rem;
+        max-width: 52rem;
+        margin: 0 auto;
+      }
+      .rsvp-form-wrapper .form-label {
+        font-family: var(--f-body);
+        font-weight: 200;
+        font-size: 1rem;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.38);
+        margin-bottom: 0.7rem;
+      }
+      .rsvp-form-wrapper .form-control,
+      .rsvp-form-wrapper .form-select {
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.11);
+        border-radius: 0.6rem;
+        color: #fff;
+        padding: 1.1rem 1.4rem;
+        font-size: 1.4rem;
+        font-family: var(--f-body);
+        font-weight: 300;
+        transition: border-color var(--tr);
+      }
+      .rsvp-form-wrapper .form-control:focus,
+      .rsvp-form-wrapper .form-select:focus {
+        border-color: rgba(192, 80, 80, 0.55);
+        box-shadow: none;
+        background: rgba(255, 255, 255, 0.07);
+        color: #fff;
+        outline: none;
+      }
+      .rsvp-form-wrapper .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.18);
+      }
+      .rsvp-form-wrapper .form-select option {
+        background: #1e1e1e;
+      }
+      .rsvp-submit-btn {
+        width: 100%;
+        padding: 1.4rem;
+        background: var(--red);
+        color: #fff;
+        border: none;
+        border-radius: 0.6rem;
+        font-family: var(--f-body);
+        font-weight: 300;
+        font-size: 1.15rem;
+        letter-spacing: 0.28em;
+        text-transform: uppercase;
+        cursor: pointer;
+        margin-top: 1rem;
+        transition:
+          background var(--tr),
+          transform var(--tr);
+      }
+      .rsvp-submit-btn:hover {
+        background: var(--red-v);
+        transform: translateY(-2px);
+      }
+      .rsvp-submit-btn:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+
+      /* ============================================================
+         #gifts  — off-white
+      ============================================================ */
+      #gifts {
+        padding: 10rem 0;
+        background: var(--off-white);
+      }
+      #gifts > .container > .text-center > p {
+        font-family: var(--f-serif);
+        font-style: italic;
+        font-size: 1.6rem;
+        color: var(--muted);
+        max-width: 44rem;
+        margin: 0 auto;
+        line-height: 1.9;
+      }
+      .gift-card {
+        background: var(--cream);
+        border-radius: 1.2rem;
+        padding: 3.2rem 2.8rem;
+        text-align: center;
+        border: 1px solid transparent;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition:
+          border-color var(--tr),
+          transform var(--tr),
+          box-shadow var(--tr);
+      }
+      .gift-card:hover {
+        border-color: rgba(155, 32, 32, 0.22);
+        transform: translateY(-4px);
+        box-shadow: 0 14px 36px rgba(155, 32, 32, 0.09);
+      }
+      .gift-card .bank-name {
+        font-family: var(--f-serif);
+        font-size: 2rem;
+        font-weight: 600;
+        color: var(--red);
+        margin-bottom: 0.8rem;
+      }
+      .gift-card .account-num {
+        font-family: "Courier New", monospace;
+        font-size: 1.8rem;
+        letter-spacing: 0.1em;
+        color: #2e2b28;
+        margin-bottom: 0.5rem;
+      }
+      .gift-card .account-holder {
+        font-family: var(--f-body);
+        font-weight: 200;
+        font-size: 1.1rem;
+        color: var(--muted);
+        text-transform: uppercase;
+        letter-spacing: 0.2em;
+      }
+      .gift-card .copy-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        margin-top: 1.8rem;
+        padding: 0.7rem 1.8rem;
+        border: 1px solid rgba(155, 32, 32, 0.32);
+        border-radius: 2rem;
+        color: var(--red);
+        font-size: 1.15rem;
+        background: transparent;
+        cursor: pointer;
+        font-family: var(--f-body);
+        font-weight: 300;
+        transition:
+          background var(--tr),
+          color var(--tr);
+      }
+      .gift-card .copy-btn:hover {
+        background: var(--red);
+        color: #fff;
+        border-color: var(--red);
+      }
+
+      /* ============================================================
+         FOOTER  — hitam
+      ============================================================ */
+      footer {
+        padding: 5rem 2rem;
+        background: var(--black);
+        color: rgba(255, 255, 255, 0.42);
+        text-align: center;
+      }
+      footer .footer-brand {
+        font-family: var(--f-display);
+        font-size: 5.5rem;
+        color: #e8c0c0;
+        display: block;
+        margin-bottom: 1.2rem;
+        line-height: 1;
+      }
+      footer small {
+        font-size: 1.15rem;
+        display: block;
+        line-height: 1.9;
+      }
+      footer a {
+        color: #e8c0c0;
+        transition: color var(--tr);
+      }
+      footer a:hover {
+        color: #fff;
+      }
+      footer .footer-links {
+        list-style: none;
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        margin: 1.5rem 0;
+      }
+      footer .footer-links a {
+        color: rgba(255, 255, 255, 0.28);
+        font-size: 1.8rem;
+      }
+      footer .footer-links a:hover {
+        color: #e8c0c0;
+      }
+
+      /* ============================================================
+         AUDIO  &  TOAST
+      ============================================================ */
+      .audio-btn {
+        position: fixed;
+        bottom: 2.5rem;
+        right: 2rem;
+        width: 4.8rem;
+        height: 4.8rem;
+        border-radius: 50%;
+        background: var(--red);
+        color: #fff;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.9rem;
+        cursor: pointer;
+        z-index: 9999;
+        box-shadow: 0 4px 18px rgba(155, 32, 32, 0.4);
+        border: none;
+        transition: transform var(--tr);
+      }
+      .audio-btn:hover {
+        transform: scale(1.1);
+      }
+      .audio-btn.playing {
+        animation: spin 5s linear infinite;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .audio-btn.playing:hover {
+        animation-play-state: paused;
+      }
+
+      .reveal {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+      .toast-msg {
+        position: fixed;
+        bottom: 8rem;
+        right: 2rem;
+        background: var(--black);
+        color: #fff;
+        padding: 1.2rem 2rem;
+        border-radius: 0.6rem;
+        font-family: var(--f-body);
+        font-weight: 300;
+        font-size: 1.3rem;
+        z-index: 9999;
+        opacity: 0;
+        pointer-events: none;
+        border-left: 2px solid var(--red);
+        transform: translateX(10px);
+        transition:
+          opacity 0.3s,
+          transform 0.3s;
+      }
+      .toast-msg.show {
+        opacity: 1;
+        transform: translateX(0);
+      }
+
+      /* ============================================================
+         RESPONSIVE
+      ============================================================ */
+      @media (max-width: 768px) {
+        html {
+          font-size: 55%;
+        }
+        .gallery-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .gallery-item:first-child {
+          grid-column: span 2;
+          aspect-ratio: 4/3;
+        }
+        .rsvp-form-wrapper {
+          padding: 2.8rem 2rem;
+        }
+        .simply-countdown > .simply-section {
+          padding: 3.2rem 3rem;
+        }
+        .hiro-floral {
+          width: clamp(12rem, 38vw, 20rem);
+        }
+        .hiro-floral.bl-f,
+        .hiro-floral.br-f {
+          width: clamp(9rem, 26vw, 14rem);
+        }
+      }
+      @media (max-width: 480px) {
+        html {
+          font-size: 45%;
+        }
+        .gallery-grid {
+          grid-template-columns: 1fr;
+        }
+        .gallery-item:first-child {
+          grid-column: span 1;
+          aspect-ratio: 4/3;
+        }
+        .hiro-floral {
+          width: clamp(10rem, 42vw, 16rem);
+        }
+        .simply-countdown {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    gap: 0.8rem;
+    padding: 1.2rem;
+    width: 100%;
+    overflow: hidden;
+  }
+  .simply-countdown > .simply-section {
+    padding: 3rem 2.8rem;
+    min-width: 0 !important;
+    width: 0;
+    flex: 1 1 0;
+  }
+      }
+    </style>
+  </head>
+
+  <body class="locked">
+    <!-- =====================================================
+         HERO / HIRO  (satu-satunya opening page)
+    ===================================================== -->
+    <section id="hiro">
+      <div class="hiro-bg"></div>
+      <div class="hiro-overlay"></div>
+
+      <!-- corner brackets -->
+      <div class="hiro-corner tl"></div>
+      <div class="hiro-corner tr"></div>
+      <div class="hiro-corner bl"></div>
+      <div class="hiro-corner br"></div>
+
+      <!--
+        ╔══════════════════════════════════════╗
+        ║  FLORAL SVG  —  sudut kiri atas      ║
+        ║  Mawar merah + daun + ranting        ║
+        ║  Gaya undangan digital Indonesia     ║
+        ╚══════════════════════════════════════╝
+      -->
+      <svg
+        class="hiro-floral fl"
+        viewBox="0 0 320 340"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="rg1" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff6060" />
+            <stop offset="55%" stop-color="#cc2020" />
+            <stop offset="100%" stop-color="#7a0a0a" />
+          </radialGradient>
+          <radialGradient id="rg2" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff5050" />
+            <stop offset="55%" stop-color="#bb1818" />
+            <stop offset="100%" stop-color="#6a0808" />
+          </radialGradient>
+          <radialGradient id="rg3" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ee4040" />
+            <stop offset="100%" stop-color="#881010" />
+          </radialGradient>
+          <!-- filter glow merah di belakang mawar -->
+          <filter id="glow-red">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="glow-white">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- ─── RANTING — putih/krem terang agar terlihat di foto gelap ─── -->
+        <path
+          d="M4 336 C20 290 16 240 38 196 C56 160 90 130 108 96 C122 68 118 38 122 10"
+          stroke="rgba(255,240,220,.7)"
+          stroke-width="2.2"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M38 196 C18 180 8 162 2 144"
+          stroke="rgba(255,240,220,.6)"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M72 156 C100 144 132 140 152 122"
+          stroke="rgba(255,240,220,.6)"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M24 260 C8 248 2 232 4 218"
+          stroke="rgba(255,240,220,.55)"
+          stroke-width="1.2"
+          fill="none"
+          stroke-linecap="round"
+        />
+
+        <!-- ─── DAUN — hijau lebih terang + outline putih tipis ─── -->
+        <path
+          d="M38 196 C22 174 18 148 30 138 C44 150 46 178 38 196Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.25)"
+          stroke-width=".8"
+        />
+        <path
+          d="M30 138 C34 158 36 176 38 196"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+          fill="none"
+        />
+        <path
+          d="M72 156 C80 134 96 122 110 126 C108 148 90 158 72 156Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.25)"
+          stroke-width=".8"
+        />
+        <path
+          d="M110 126 C96 136 82 148 72 156"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+          fill="none"
+        />
+        <path
+          d="M90 130 C78 112 80 96 92 92 C102 104 100 122 90 130Z"
+          fill="#347a2e"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+        />
+        <path
+          d="M24 260 C10 246 10 230 22 228 C32 236 32 252 24 260Z"
+          fill="#2a6424"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+        />
+        <path
+          d="M108 96 C96 82 96 68 108 64 C118 74 118 88 108 96Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+        />
+
+        <!-- ─── KUNCUP — merah terang + outline putih ─── -->
+        <g transform="translate(2,144)">
+          <ellipse
+            rx="6"
+            ry="8"
+            fill="#cc1a1a"
+            stroke="rgba(255,255,255,.4)"
+            stroke-width=".8"
+          />
+          <path d="M-4,-2 C-2,-10 2,-10 4,-2" fill="#ee3030" />
+          <path d="M-3,2 C-1,-2 1,-2 3,2" fill="#ff4444" opacity=".8" />
+        </g>
+        <g transform="translate(152,122)">
+          <ellipse
+            rx="7"
+            ry="9"
+            fill="#cc1a1a"
+            stroke="rgba(255,255,255,.4)"
+            stroke-width=".8"
+          />
+          <path d="M-5,-2 C-2,-11 2,-11 5,-2" fill="#ee3030" />
+          <path d="M-4,3 C-1,-2 1,-2 4,3" fill="#ff4444" opacity=".8" />
+        </g>
+
+        <!-- ─── MAWAR UTAMA — besar @ (122,22), filter glow ─── -->
+        <g transform="translate(122,22)" filter="url(#glow-red)">
+          <!-- shadow/glow merah di belakang -->
+          <ellipse rx="22" ry="22" fill="rgba(200,20,20,.35)" />
+          <!-- kelopak luar dengan stroke putih -->
+          <path
+            d="M0,-20 C-12,-15 -18,-4 -15,7 C-11,16 -2,18 0,20 C2,18 11,16 15,7 C18,-4 12,-15 0,-20Z"
+            fill="url(#rg1)"
+            stroke="rgba(255,255,255,.35)"
+            stroke-width=".8"
+          />
+          <path
+            d="M-20,0 C-15,-12 -4,-18 7,-15 C16,-11 18,-2 20,0 C18,2 16,11 7,15 C-4,18 -15,12 -20,0Z"
+            fill="url(#rg2)"
+            stroke="rgba(255,255,255,.3)"
+            stroke-width=".8"
+          />
+          <!-- kelopak diagonal -->
+          <path
+            d="M-14,-14 C-18,-6 -16,6 -10,12 C-4,16 4,16 10,12 C16,6 18,-6 14,-14 C8,-18 -8,-18 -14,-14Z"
+            fill="url(#rg1)"
+            stroke="rgba(255,255,255,.25)"
+            stroke-width=".7"
+          />
+          <!-- tengah berlapis -->
+          <ellipse rx="10" ry="10" fill="#dd2828" />
+          <ellipse rx="7" ry="7" fill="#ee3535" />
+          <ellipse rx="4.5" ry="4.5" fill="#ff4848" />
+          <ellipse rx="2.5" ry="2.5" fill="#ff7070" />
+          <!-- highlight -->
+          <ellipse
+            cx="-2"
+            cy="-2"
+            rx="3"
+            ry="2"
+            fill="rgba(255,200,200,.6)"
+            transform="rotate(-30,-2,-2)"
+          />
+        </g>
+
+        <!-- ─── MAWAR SEDANG @ (108,96) ─── -->
+        <g transform="translate(108,96)" filter="url(#glow-red)">
+          <ellipse rx="17" ry="17" fill="rgba(200,20,20,.28)" />
+          <path
+            d="M0,-16 C-9,-12 -14,-3 -12,5 C-9,12 -2,14 0,16 C2,14 9,12 12,5 C14,-3 9,-12 0,-16Z"
+            fill="url(#rg2)"
+            stroke="rgba(255,255,255,.3)"
+            stroke-width=".8"
+          />
+          <path
+            d="M-16,0 C-12,-9 -3,-14 5,-12 C12,-9 14,-2 16,0 C14,2 12,9 5,12 C-3,14 -12,9 -16,0Z"
+            fill="url(#rg3)"
+            stroke="rgba(255,255,255,.25)"
+            stroke-width=".7"
+          />
+          <ellipse rx="9" ry="9" fill="#dd2828" />
+          <ellipse rx="6" ry="6" fill="#ee3535" />
+          <ellipse rx="3.5" ry="3.5" fill="#ff4848" />
+          <ellipse
+            cx="-1.5"
+            cy="-1.5"
+            rx="2.5"
+            ry="1.8"
+            fill="rgba(255,200,200,.55)"
+            transform="rotate(-30,-1.5,-1.5)"
+          />
+        </g>
+
+        <!-- ─── MAWAR KECIL @ (64,148) ─── -->
+        <g transform="translate(64,148)" filter="url(#glow-red)">
+          <ellipse rx="13" ry="13" fill="rgba(200,20,20,.22)" />
+          <path
+            d="M0,-13 C-7,-9 -11,-2 -9,4 C-7,9 -2,12 0,13 C2,12 7,9 9,4 C11,-2 7,-9 0,-13Z"
+            fill="url(#rg1)"
+            stroke="rgba(255,255,255,.28)"
+            stroke-width=".7"
+          />
+          <path
+            d="M-13,0 C-9,-7 -2,-11 4,-9 C9,-7 12,-2 13,0 C12,2 9,7 4,9 C-2,11 -9,7 -13,0Z"
+            fill="url(#rg2)"
+            stroke="rgba(255,255,255,.22)"
+            stroke-width=".6"
+          />
+          <ellipse rx="7.5" ry="7.5" fill="#dd2020" />
+          <ellipse rx="4.5" ry="4.5" fill="#ee3030" />
+          <ellipse rx="2.5" ry="2.5" fill="#ff5050" />
+        </g>
+
+        <!-- ─── BUNGA PUTIH 5-KELOPAK — diperbesar + glow ─── -->
+        <g transform="translate(22,236)" filter="url(#glow-white)">
+          <!-- aura putih -->
+          <circle r="14" fill="rgba(255,255,255,.12)" />
+          <path
+            d="M0,-10 C-3,-10 -5,-7 -5,-4 C-5,-1 -3,1 0,2 C3,1 5,-1 5,-4 C5,-7 3,-10 0,-10Z"
+            fill="#fff"
+            opacity=".95"
+          />
+          <path
+            d="M9.5,-3 C7.5,-6 4,-7 2,-5 C0,-3 0,0 2,1.5 C4,3 7.5,2.5 9.5,0 Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(72,0,0)"
+          />
+          <path
+            d="M9.5,-3 C7.5,-6 4,-7 2,-5 C0,-3 0,0 2,1.5 C4,3 7.5,2.5 9.5,0 Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(144,0,0)"
+          />
+          <path
+            d="M9.5,-3 C7.5,-6 4,-7 2,-5 C0,-3 0,0 2,1.5 C4,3 7.5,2.5 9.5,0 Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(216,0,0)"
+          />
+          <path
+            d="M9.5,-3 C7.5,-6 4,-7 2,-5 C0,-3 0,0 2,1.5 C4,3 7.5,2.5 9.5,0 Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(288,0,0)"
+          />
+          <circle r="4.5" fill="#fff9e8" />
+          <circle r="2.2" fill="#f0d840" />
+        </g>
+
+        <!-- bunga putih kedua lebih kecil -->
+        <g transform="translate(140,108)" filter="url(#glow-white)">
+          <circle r="10" fill="rgba(255,255,255,.1)" />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(72,0,0)"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(144,0,0)"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(216,0,0)"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(288,0,0)"
+          />
+          <circle r="3.5" fill="#fff9e8" />
+          <circle r="1.6" fill="#f0d840" />
+        </g>
+
+        <!-- ─── BERRY / DOT aksen — putih & merah cerah ─── -->
+        <circle
+          cx="56"
+          cy="178"
+          r="3.5"
+          fill="#ff4444"
+          stroke="rgba(255,255,255,.5)"
+          stroke-width=".8"
+        />
+        <circle
+          cx="48"
+          cy="186"
+          r="2.5"
+          fill="#ee3333"
+          stroke="rgba(255,255,255,.4)"
+          stroke-width=".6"
+        />
+        <circle
+          cx="62"
+          cy="190"
+          r="2.5"
+          fill="#ff5555"
+          stroke="rgba(255,255,255,.4)"
+          stroke-width=".6"
+        />
+        <circle
+          cx="18"
+          cy="250"
+          r="3"
+          fill="#ff4444"
+          stroke="rgba(255,255,255,.45)"
+          stroke-width=".7"
+        />
+        <circle
+          cx="10"
+          cy="258"
+          r="2"
+          fill="#ee3333"
+          stroke="rgba(255,255,255,.35)"
+          stroke-width=".6"
+        />
+        <!-- titik putih kecil sebagai filler -->
+        <circle cx="32" cy="212" r="1.8" fill="rgba(255,255,255,.65)" />
+        <circle cx="44" cy="168" r="1.5" fill="rgba(255,255,255,.55)" />
+        <circle cx="120" cy="44" r="1.5" fill="rgba(255,255,255,.55)" />
+      </svg>
+
+      <svg
+        class="hiro-floral fr"
+        viewBox="0 0 320 340"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="rg1r" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff6060" />
+            <stop offset="55%" stop-color="#cc2020" />
+            <stop offset="100%" stop-color="#7a0a0a" />
+          </radialGradient>
+          <radialGradient id="rg2r" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff5050" />
+            <stop offset="55%" stop-color="#bb1818" />
+            <stop offset="100%" stop-color="#6a0808" />
+          </radialGradient>
+          <radialGradient id="rg3r" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ee4040" />
+            <stop offset="100%" stop-color="#881010" />
+          </radialGradient>
+          <filter id="glow-red-r">
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="glow-white-r">
+            <feGaussianBlur stdDeviation="2" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <path
+          d="M4 336 C20 290 16 240 38 196 C56 160 90 130 108 96 C122 68 118 38 122 10"
+          stroke="rgba(255,240,220,.7)"
+          stroke-width="2.2"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M38 196 C18 180 8 162 2 144"
+          stroke="rgba(255,240,220,.6)"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M72 156 C100 144 132 140 152 122"
+          stroke="rgba(255,240,220,.6)"
+          stroke-width="1.5"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M24 260 C8 248 2 232 4 218"
+          stroke="rgba(255,240,220,.55)"
+          stroke-width="1.2"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M38 196 C22 174 18 148 30 138 C44 150 46 178 38 196Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.25)"
+          stroke-width=".8"
+        />
+        <path
+          d="M30 138 C34 158 36 176 38 196"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+          fill="none"
+        />
+        <path
+          d="M72 156 C80 134 96 122 110 126 C108 148 90 158 72 156Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.25)"
+          stroke-width=".8"
+        />
+        <path
+          d="M90 130 C78 112 80 96 92 92 C102 104 100 122 90 130Z"
+          fill="#347a2e"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+        />
+        <path
+          d="M24 260 C10 246 10 230 22 228 C32 236 32 252 24 260Z"
+          fill="#2a6424"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+        />
+        <path
+          d="M108 96 C96 82 96 68 108 64 C118 74 118 88 108 96Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".7"
+        />
+        <g transform="translate(2,144)">
+          <ellipse
+            rx="6"
+            ry="8"
+            fill="#cc1a1a"
+            stroke="rgba(255,255,255,.4)"
+            stroke-width=".8"
+          />
+          <path d="M-4,-2 C-2,-10 2,-10 4,-2" fill="#ee3030" />
+          <path d="M-3,2 C-1,-2 1,-2 3,2" fill="#ff4444" opacity=".8" />
+        </g>
+        <g transform="translate(152,122)">
+          <ellipse
+            rx="7"
+            ry="9"
+            fill="#cc1a1a"
+            stroke="rgba(255,255,255,.4)"
+            stroke-width=".8"
+          />
+          <path d="M-5,-2 C-2,-11 2,-11 5,-2" fill="#ee3030" />
+          <path d="M-4,3 C-1,-2 1,-2 4,3" fill="#ff4444" opacity=".8" />
+        </g>
+        <g transform="translate(122,22)" filter="url(#glow-red-r)">
+          <ellipse rx="22" ry="22" fill="rgba(200,20,20,.35)" />
+          <path
+            d="M0,-20 C-12,-15 -18,-4 -15,7 C-11,16 -2,18 0,20 C2,18 11,16 15,7 C18,-4 12,-15 0,-20Z"
+            fill="url(#rg1r)"
+            stroke="rgba(255,255,255,.35)"
+            stroke-width=".8"
+          />
+          <path
+            d="M-20,0 C-15,-12 -4,-18 7,-15 C16,-11 18,-2 20,0 C18,2 16,11 7,15 C-4,18 -15,12 -20,0Z"
+            fill="url(#rg2r)"
+            stroke="rgba(255,255,255,.3)"
+            stroke-width=".8"
+          />
+          <path
+            d="M-14,-14 C-18,-6 -16,6 -10,12 C-4,16 4,16 10,12 C16,6 18,-6 14,-14 C8,-18 -8,-18 -14,-14Z"
+            fill="url(#rg1r)"
+            stroke="rgba(255,255,255,.25)"
+            stroke-width=".7"
+          />
+          <ellipse rx="10" ry="10" fill="#dd2828" />
+          <ellipse rx="7" ry="7" fill="#ee3535" />
+          <ellipse rx="4.5" ry="4.5" fill="#ff4848" />
+          <ellipse rx="2.5" ry="2.5" fill="#ff7070" />
+          <ellipse
+            cx="-2"
+            cy="-2"
+            rx="3"
+            ry="2"
+            fill="rgba(255,200,200,.6)"
+            transform="rotate(-30,-2,-2)"
+          />
+        </g>
+        <g transform="translate(108,96)" filter="url(#glow-red-r)">
+          <ellipse rx="17" ry="17" fill="rgba(200,20,20,.28)" />
+          <path
+            d="M0,-16 C-9,-12 -14,-3 -12,5 C-9,12 -2,14 0,16 C2,14 9,12 12,5 C14,-3 9,-12 0,-16Z"
+            fill="url(#rg2r)"
+            stroke="rgba(255,255,255,.3)"
+            stroke-width=".8"
+          />
+          <path
+            d="M-16,0 C-12,-9 -3,-14 5,-12 C12,-9 14,-2 16,0 C14,2 12,9 5,12 C-3,14 -12,9 -16,0Z"
+            fill="url(#rg3r)"
+            stroke="rgba(255,255,255,.25)"
+            stroke-width=".7"
+          />
+          <ellipse rx="9" ry="9" fill="#dd2828" />
+          <ellipse rx="6" ry="6" fill="#ee3535" />
+          <ellipse rx="3.5" ry="3.5" fill="#ff4848" />
+          <ellipse
+            cx="-1.5"
+            cy="-1.5"
+            rx="2.5"
+            ry="1.8"
+            fill="rgba(255,200,200,.55)"
+            transform="rotate(-30,-1.5,-1.5)"
+          />
+        </g>
+        <g transform="translate(64,148)" filter="url(#glow-red-r)">
+          <ellipse rx="13" ry="13" fill="rgba(200,20,20,.22)" />
+          <path
+            d="M0,-13 C-7,-9 -11,-2 -9,4 C-7,9 -2,12 0,13 C2,12 7,9 9,4 C11,-2 7,-9 0,-13Z"
+            fill="url(#rg1r)"
+            stroke="rgba(255,255,255,.28)"
+            stroke-width=".7"
+          />
+          <path
+            d="M-13,0 C-9,-7 -2,-11 4,-9 C9,-7 12,-2 13,0 C12,2 9,7 4,9 C-2,11 -9,7 -13,0Z"
+            fill="url(#rg2r)"
+            stroke="rgba(255,255,255,.22)"
+            stroke-width=".6"
+          />
+          <ellipse rx="7.5" ry="7.5" fill="#dd2020" />
+          <ellipse rx="4.5" ry="4.5" fill="#ee3030" />
+          <ellipse rx="2.5" ry="2.5" fill="#ff5050" />
+        </g>
+        <g transform="translate(22,236)" filter="url(#glow-white-r)">
+          <circle r="14" fill="rgba(255,255,255,.12)" />
+          <path
+            d="M0,-10 C-3,-10 -5,-7 -5,-4 C-5,-1 -3,1 0,2 C3,1 5,-1 5,-4 C5,-7 3,-10 0,-10Z"
+            fill="#fff"
+            opacity=".95"
+          />
+          <path
+            d="M0,-10 C-3,-10 -5,-7 -5,-4 C-5,-1 -3,1 0,2 C3,1 5,-1 5,-4 C5,-7 3,-10 0,-10Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(72,0,0)"
+          />
+          <path
+            d="M0,-10 C-3,-10 -5,-7 -5,-4 C-5,-1 -3,1 0,2 C3,1 5,-1 5,-4 C5,-7 3,-10 0,-10Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(144,0,0)"
+          />
+          <path
+            d="M0,-10 C-3,-10 -5,-7 -5,-4 C-5,-1 -3,1 0,2 C3,1 5,-1 5,-4 C5,-7 3,-10 0,-10Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(216,0,0)"
+          />
+          <path
+            d="M0,-10 C-3,-10 -5,-7 -5,-4 C-5,-1 -3,1 0,2 C3,1 5,-1 5,-4 C5,-7 3,-10 0,-10Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(288,0,0)"
+          />
+          <circle r="4.5" fill="#fff9e8" />
+          <circle r="2.2" fill="#f0d840" />
+        </g>
+        <g transform="translate(140,108)" filter="url(#glow-white-r)">
+          <circle r="10" fill="rgba(255,255,255,.1)" />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(72,0,0)"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(144,0,0)"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(216,0,0)"
+          />
+          <path
+            d="M0,-8 C-2.4,-8 -4,-5.6 -4,-3.2 C-4,-0.8 -2.4,.8 0,1.6 C2.4,.8 4,-0.8 4,-3.2 C4,-5.6 2.4,-8 0,-8Z"
+            fill="#fff"
+            opacity=".92"
+            transform="rotate(288,0,0)"
+          />
+          <circle r="3.5" fill="#fff9e8" />
+          <circle r="1.6" fill="#f0d840" />
+        </g>
+        <circle
+          cx="56"
+          cy="178"
+          r="3.5"
+          fill="#ff4444"
+          stroke="rgba(255,255,255,.5)"
+          stroke-width=".8"
+        />
+        <circle
+          cx="48"
+          cy="186"
+          r="2.5"
+          fill="#ee3333"
+          stroke="rgba(255,255,255,.4)"
+          stroke-width=".6"
+        />
+        <circle
+          cx="62"
+          cy="190"
+          r="2.5"
+          fill="#ff5555"
+          stroke="rgba(255,255,255,.4)"
+          stroke-width=".6"
+        />
+        <circle
+          cx="18"
+          cy="250"
+          r="3"
+          fill="#ff4444"
+          stroke="rgba(255,255,255,.45)"
+          stroke-width=".7"
+        />
+        <circle
+          cx="10"
+          cy="258"
+          r="2"
+          fill="#ee3333"
+          stroke="rgba(255,255,255,.35)"
+          stroke-width=".6"
+        />
+        <circle cx="32" cy="212" r="1.8" fill="rgba(255,255,255,.65)" />
+        <circle cx="44" cy="168" r="1.5" fill="rgba(255,255,255,.55)" />
+        <circle cx="120" cy="44" r="1.5" fill="rgba(255,255,255,.55)" />
+      </svg>
+
+      <!-- sudut kiri bawah: mirror vertikal -->
+      <svg
+        class="hiro-floral bl-f"
+        viewBox="0 0 260 220"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="rg1b" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff6060" />
+            <stop offset="55%" stop-color="#cc2020" />
+            <stop offset="100%" stop-color="#7a0a0a" />
+          </radialGradient>
+          <radialGradient id="rg2b" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff5050" />
+            <stop offset="55%" stop-color="#bb1818" />
+            <stop offset="100%" stop-color="#6a0808" />
+          </radialGradient>
+          <filter id="glow-rb">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="glow-wb">
+            <feGaussianBlur stdDeviation="1.8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <path
+          d="M4 216 C16 182 14 150 32 120 C46 98 72 80 84 56 C92 40 90 20 92 4"
+          stroke="rgba(255,240,220,.65)"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M32 120 C18 110 10 96 6 82"
+          stroke="rgba(255,240,220,.55)"
+          stroke-width="1.3"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M56 96 C80 86 104 84 118 70"
+          stroke="rgba(255,240,220,.55)"
+          stroke-width="1.3"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M32 120 C18 108 16 94 26 88 C38 96 38 112 32 120Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.25)"
+          stroke-width=".7"
+        />
+        <path
+          d="M56 96 C64 80 76 72 86 76 C84 92 72 98 56 96Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.22)"
+          stroke-width=".7"
+        />
+        <path
+          d="M84 56 C74 44 74 32 84 28 C92 36 92 48 84 56Z"
+          fill="#347a2e"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".6"
+        />
+        <g transform="translate(6,82)">
+          <ellipse
+            rx="5"
+            ry="7"
+            fill="#cc1a1a"
+            stroke="rgba(255,255,255,.38)"
+            stroke-width=".7"
+          />
+          <path d="M-3,-2 C-1,-8 1,-8 3,-2" fill="#ee3030" />
+        </g>
+        <g transform="translate(92,22)" filter="url(#glow-rb)">
+          <ellipse rx="17" ry="17" fill="rgba(200,20,20,.3)" />
+          <path
+            d="M0,-15 C-9,-11 -13,-3 -11,5 C-9,12 -2,14 0,15 C2,14 9,12 11,5 C13,-3 9,-11 0,-15Z"
+            fill="url(#rg1b)"
+            stroke="rgba(255,255,255,.32)"
+            stroke-width=".8"
+          />
+          <path
+            d="M-15,0 C-11,-9 -3,-13 5,-11 C12,-9 14,-2 15,0 C14,2 12,9 5,11 C-3,13 -11,9 -15,0Z"
+            fill="url(#rg2b)"
+            stroke="rgba(255,255,255,.26)"
+            stroke-width=".7"
+          />
+          <ellipse rx="9" ry="9" fill="#dd2828" />
+          <ellipse rx="6" ry="6" fill="#ee3535" />
+          <ellipse rx="3.5" ry="3.5" fill="#ff4848" />
+          <ellipse rx="2" ry="2" fill="#ff7070" />
+          <ellipse
+            cx="-1.5"
+            cy="-1.5"
+            rx="2.5"
+            ry="1.8"
+            fill="rgba(255,200,200,.55)"
+            transform="rotate(-30,-1.5,-1.5)"
+          />
+        </g>
+        <g transform="translate(50,88)" filter="url(#glow-rb)">
+          <ellipse rx="12" ry="12" fill="rgba(200,20,20,.22)" />
+          <path
+            d="M0,-11 C-6,-8 -10,-2 -8,4 C-6,9 -2,11 0,11 C2,11 6,9 8,4 C10,-2 6,-8 0,-11Z"
+            fill="url(#rg1b)"
+            stroke="rgba(255,255,255,.28)"
+            stroke-width=".7"
+          />
+          <path
+            d="M-11,0 C-8,-6 -2,-10 4,-8 C9,-6 11,-2 11,0 C11,2 9,6 4,8 C-2,10 -8,6 -11,0Z"
+            fill="url(#rg2b)"
+            stroke="rgba(255,255,255,.22)"
+            stroke-width=".6"
+          />
+          <ellipse rx="7" ry="7" fill="#dd2020" />
+          <ellipse rx="4.5" ry="4.5" fill="#ee3030" />
+          <ellipse rx="2.5" ry="2.5" fill="#ff5050" />
+        </g>
+        <g transform="translate(20,162)" filter="url(#glow-wb)">
+          <circle r="12" fill="rgba(255,255,255,.1)" />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(72,0,0)"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(144,0,0)"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(216,0,0)"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(288,0,0)"
+          />
+          <circle r="4" fill="#fff9e8" />
+          <circle r="2" fill="#f0d840" />
+        </g>
+        <circle
+          cx="44"
+          cy="110"
+          r="3"
+          fill="#ff4444"
+          stroke="rgba(255,255,255,.48)"
+          stroke-width=".7"
+        />
+        <circle
+          cx="38"
+          cy="116"
+          r="2"
+          fill="#ee3333"
+          stroke="rgba(255,255,255,.38)"
+          stroke-width=".6"
+        />
+        <circle cx="50" cy="104" r="1.8" fill="rgba(255,255,255,.6)" />
+        <circle cx="16" cy="148" r="1.6" fill="rgba(255,255,255,.5)" />
+      </svg>
+
+      <!-- sudut kanan bawah: mirror keduanya -->
+      <svg
+        class="hiro-floral br-f"
+        viewBox="0 0 260 220"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <defs>
+          <radialGradient id="rg1br" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff6060" />
+            <stop offset="55%" stop-color="#cc2020" />
+            <stop offset="100%" stop-color="#7a0a0a" />
+          </radialGradient>
+          <radialGradient id="rg2br" cx="35%" cy="30%" r="65%">
+            <stop offset="0%" stop-color="#ff5050" />
+            <stop offset="55%" stop-color="#bb1818" />
+            <stop offset="100%" stop-color="#6a0808" />
+          </radialGradient>
+          <filter id="glow-rbr">
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+          <filter id="glow-wbr">
+            <feGaussianBlur stdDeviation="1.8" result="blur" />
+            <feMerge>
+              <feMergeNode in="blur" />
+              <feMergeNode in="SourceGraphic" />
+            </feMerge>
+          </filter>
+        </defs>
+        <path
+          d="M4 216 C16 182 14 150 32 120 C46 98 72 80 84 56 C92 40 90 20 92 4"
+          stroke="rgba(255,240,220,.65)"
+          stroke-width="2"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M32 120 C18 110 10 96 6 82"
+          stroke="rgba(255,240,220,.55)"
+          stroke-width="1.3"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M56 96 C80 86 104 84 118 70"
+          stroke="rgba(255,240,220,.55)"
+          stroke-width="1.3"
+          fill="none"
+          stroke-linecap="round"
+        />
+        <path
+          d="M32 120 C18 108 16 94 26 88 C38 96 38 112 32 120Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.25)"
+          stroke-width=".7"
+        />
+        <path
+          d="M56 96 C64 80 76 72 86 76 C84 92 72 98 56 96Z"
+          fill="#2d6e28"
+          stroke="rgba(255,255,255,.22)"
+          stroke-width=".7"
+        />
+        <path
+          d="M84 56 C74 44 74 32 84 28 C92 36 92 48 84 56Z"
+          fill="#347a2e"
+          stroke="rgba(255,255,255,.2)"
+          stroke-width=".6"
+        />
+        <g transform="translate(6,82)">
+          <ellipse
+            rx="5"
+            ry="7"
+            fill="#cc1a1a"
+            stroke="rgba(255,255,255,.38)"
+            stroke-width=".7"
+          />
+          <path d="M-3,-2 C-1,-8 1,-8 3,-2" fill="#ee3030" />
+        </g>
+        <g transform="translate(92,22)" filter="url(#glow-rbr)">
+          <ellipse rx="17" ry="17" fill="rgba(200,20,20,.3)" />
+          <path
+            d="M0,-15 C-9,-11 -13,-3 -11,5 C-9,12 -2,14 0,15 C2,14 9,12 11,5 C13,-3 9,-11 0,-15Z"
+            fill="url(#rg1br)"
+            stroke="rgba(255,255,255,.32)"
+            stroke-width=".8"
+          />
+          <path
+            d="M-15,0 C-11,-9 -3,-13 5,-11 C12,-9 14,-2 15,0 C14,2 12,9 5,11 C-3,13 -11,9 -15,0Z"
+            fill="url(#rg2br)"
+            stroke="rgba(255,255,255,.26)"
+            stroke-width=".7"
+          />
+          <ellipse rx="9" ry="9" fill="#dd2828" />
+          <ellipse rx="6" ry="6" fill="#ee3535" />
+          <ellipse rx="3.5" ry="3.5" fill="#ff4848" />
+          <ellipse rx="2" ry="2" fill="#ff7070" />
+          <ellipse
+            cx="-1.5"
+            cy="-1.5"
+            rx="2.5"
+            ry="1.8"
+            fill="rgba(255,200,200,.55)"
+            transform="rotate(-30,-1.5,-1.5)"
+          />
+        </g>
+        <g transform="translate(50,88)" filter="url(#glow-rbr)">
+          <ellipse rx="12" ry="12" fill="rgba(200,20,20,.22)" />
+          <path
+            d="M0,-11 C-6,-8 -10,-2 -8,4 C-6,9 -2,11 0,11 C2,11 6,9 8,4 C10,-2 6,-8 0,-11Z"
+            fill="url(#rg1br)"
+            stroke="rgba(255,255,255,.28)"
+            stroke-width=".7"
+          />
+          <path
+            d="M-11,0 C-8,-6 -2,-10 4,-8 C9,-6 11,-2 11,0 C11,2 9,6 4,8 C-2,10 -8,6 -11,0Z"
+            fill="url(#rg2br)"
+            stroke="rgba(255,255,255,.22)"
+            stroke-width=".6"
+          />
+          <ellipse rx="7" ry="7" fill="#dd2020" />
+          <ellipse rx="4.5" ry="4.5" fill="#ee3030" />
+          <ellipse rx="2.5" ry="2.5" fill="#ff5050" />
+        </g>
+        <g transform="translate(20,162)" filter="url(#glow-wbr)">
+          <circle r="12" fill="rgba(255,255,255,.1)" />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(72,0,0)"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(144,0,0)"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(216,0,0)"
+          />
+          <path
+            d="M0,-9 C-2.7,-9 -4.5,-6.3 -4.5,-3.6 C-4.5,-.9 -2.7,.9 0,1.8 C2.7,.9 4.5,-.9 4.5,-3.6 C4.5,-6.3 2.7,-9 0,-9Z"
+            fill="#fff"
+            opacity=".95"
+            transform="rotate(288,0,0)"
+          />
+          <circle r="4" fill="#fff9e8" />
+          <circle r="2" fill="#f0d840" />
+        </g>
+        <circle
+          cx="44"
+          cy="110"
+          r="3"
+          fill="#ff4444"
+          stroke="rgba(255,255,255,.48)"
+          stroke-width=".7"
+        />
+        <circle
+          cx="38"
+          cy="116"
+          r="2"
+          fill="#ee3333"
+          stroke="rgba(255,255,255,.38)"
+          stroke-width=".6"
+        />
+        <circle cx="50" cy="104" r="1.8" fill="rgba(255,255,255,.6)" />
+        <circle cx="16" cy="148" r="1.6" fill="rgba(255,255,255,.5)" />
+      </svg>
+
+      <div class="petals-container" id="petals"></div>
+
+      <!-- content asli dipertahankan -->
+      <div class="hiro-content">
+        <p class="hiro-to">
+          Kepada <span id="guest-pronoun">Bapak/Ibu/Saudara/i</span>
+          <span id="guest-name"></span>
+        </p>
+        <div class="hiro-line"></div>
+        <p class="hiro-invite">
+          Dengan hormat, kami mengundang Anda untuk hadir dalam acara unduh mantu
+          kami.
+        </p>
+        <h1 class="hiro-names">Enjel &amp; Reza</h1>
+        <div class="hiro-line" style="margin-top: 3.5rem"></div>
+        <button class="hiro-btn" onclick="openInvitation()">
+          Buka Undangan
+        </button>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         NAVBAR
+    ===================================================== -->
+    <nav class="navbar navbar-expand-md bg-transparent sticky-top mynav">
+      <div class="container">
+        <a class="navbar-brand" href="#">E &amp; R</a>
+        <button
+          class="navbar-toggler border-0"
+          type="button"
+          data-bs-toggle="offcanvas"
+          data-bs-target="#offcanvasNavbar"
+        >
+          <i class="bi bi-list" style="font-size: 2.4rem; color: #2e2b28"></i>
+        </button>
+        <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Enjel &amp; Reza</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="offcanvas"
+            ></button>
+          </div>
+          <div class="offcanvas-body">
+            <ul class="navbar-nav ms-auto">
+              <li class="nav-item">
+                <a class="nav-link" href="#home">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#info">Info</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#gallery">Gallery</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#rsvp">RSVP</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#gifts">Gifts</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- =====================================================
+         HOME
+    ===================================================== -->
+    <section id="home">
+      <div class="container">
+        <div class="home-intro reveal">
+          <span class="sec-label">Save the Date</span>
+          <h2 class="sec-title">Acara Pernikahan</h2>
+          <div class="rule"><span class="rule-dot"></span></div>
+          <p>
+            Kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa
+            restu pada pernikahan kami.
+          </p>
+        </div>
+        <div class="text-center reveal" style="margin-bottom: 6rem">
+          <div class="simply-countdown mx-auto"></div>
+          <p
+            style="
+              margin-top: 3rem;
+              font-family: var(--f-serif);
+              font-style: italic;
+              font-size: 1.65rem;
+              color: var(--muted);
+            "
+          >
+            28 Maret 2026 &mdash; Kediri, Jawa Timur
+          </p>
+        </div>
+        <div class="row align-items-center couple-section g-4">
+          <div class="col-lg-5 reveal">
+            <div class="couple-card">
+              <img src="asset/img/reja.jpg" alt="Reza" />
+              <div class="couple-info">
+                <h3>Mohammad Rifki Reza Fahlevi</h3>
+                <p>
+                  Putra dari<br />Bpk. Zunaidi Asa'ad<br />dan Ibu Yuni Yus
+                  Indriastatik
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="col-lg-2 text-center reveal">
+            <div class="couple-divider"><i class="bi bi-heart-fill"></i></div>
+          </div>
+          <div class="col-lg-5 reveal">
+            <div class="couple-card reverse">
+              <img src="asset/img/enjel.jpg" alt="Enjel" />
+              <div class="couple-info">
+                <h3>Dian Enjelya Bella Safitri</h3>
+                <p>Putri dari<br />Bpk. Mardjono<br />dan Ibu Lasmiati</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         INFO
+    ===================================================== -->
+    <section id="info">
+      <div class="container">
+        <div class="row justify-content-center text-center mb-5 reveal">
+          <div class="col-lg-6">
+            <span class="sec-label">Waktu &amp; Tempat</span>
+            <h2 class="sec-title">Informasi Acara</h2>
+            <div class="rule"><span class="rule-dot"></span></div>
+          </div>
+        </div>
+        <div class="row justify-content-center mb-5 reveal">
+          <div class="col-lg-8 text-center">
+            <h4>Kediaman Bpk Zunaidi Asa'ad dan Ibu Yuni Yus Indriastatik</h4>
+            <p class="info-address">
+              <i
+                class="bi bi-geo-alt-fill"
+                style="color: #e8c0c0; margin-right: 0.6rem"
+              ></i>
+             Semambung,Kec. Kayen Kidul, Kabupaten Kediri, Jawa Timur
+            </p>
+            <div class="map-wrapper">
+              <iframe
+                src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d247.0970563354162!2d112.09729008174973!3d-7.731022353576422!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sid!2sid!4v1773916915560!5m2!1sid!2sid"
+                width="100%"
+                height="260"
+                style="border: 0"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+              ></iframe>
+            </div>
+            <a
+              href="https://maps.app.goo.gl/vnRptFAwSpPwnhqa9"
+              target="_blank"
+              class="info-btn"
+            >
+              <i class="bi bi-map"></i> Buka di Google Maps
+            </a>
+          </div>
+        </div>
+        <!-- <div class="row justify-content-center g-4">
+          <div class="col-md-5 reveal">
+            <div class="event-card">
+              <i class="bi bi-moon-stars event-icon"></i>
+              <h4>Akad Nikah</h4>
+              <p class="event-time">
+                <i class="bi bi-clock me-1"></i>07.30 – 08.30 WIB
+              </p>
+              <p class="event-detail">Kamis, 26 Maret 2026</p>
+              <p class="event-detail mt-2" style="font-size: 1.3rem">
+                Diharapkan kondusif menjaga khidmad seluruh prosesi akad nikah.
+              </p>
+            </div>
+          </div> -->
+          <div class="col-md-5 reveal">
+            <div class="event-card">
+              <i class="bi bi-people event-icon"></i>
+              <h4>Unduh Mantu</h4>
+              <p class="event-time">
+                <i class="bi bi-clock me-1"></i>09.00 WIB – 13.00 WIB
+              </p>
+              <p class="event-detail">Sabtu, 28 Maret 2026</p>
+              <p class="event-detail mt-2" style="font-size: 1.3rem">
+                Kami sangat menantikan kehadiran dan doa restu
+                Bapak/Ibu/Saudara/i.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         GALLERY
+    ===================================================== -->
+    <section id="gallery">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: 1rem">
+          <span class="sec-label">Memori Pre-Wedding</span>
+          <h2 class="sec-title">Galeri Foto</h2>
+          <div class="rule"><span class="rule-dot"></span></div>
+        </div>
+        <div class="gallery-grid">
+          <div class="gallery-item reveal">
+            <a
+              href="asset/img/foto1.jpg"
+              data-toggle="lightbox"
+              data-gallery="prewedd"
+              ><img
+                src="asset/img/thumb/foto1.jpg"
+                alt="E&R 1"
+                loading="lazy" />
+              <div class="gallery-overlay"><i class="bi bi-zoom-in"></i></div
+            ></a>
+          </div>
+          <div class="gallery-item reveal">
+            <a
+              href="asset/img/foto2.jpg"
+              data-toggle="lightbox"
+              data-gallery="prewedd"
+              ><img
+                src="asset/img/thumb/foto2.jpg"
+                alt="E&R 2"
+                loading="lazy" />
+              <div class="gallery-overlay"><i class="bi bi-zoom-in"></i></div
+            ></a>
+          </div>
+          <div class="gallery-item reveal">
+            <a
+              href="asset/img/foto3.jpg"
+              data-toggle="lightbox"
+              data-gallery="prewedd"
+              ><img
+                src="asset/img/thumb/foto3.jpg"
+                alt="E&R 3"
+                loading="lazy" />
+              <div class="gallery-overlay"><i class="bi bi-zoom-in"></i></div
+            ></a>
+          </div>
+          <div class="gallery-item reveal">
+            <a
+              href="asset/img/foto4.jpg"
+              data-toggle="lightbox"
+              data-gallery="prewedd"
+              ><img
+                src="asset/img/thumb/foto4.jpg"
+                alt="E&R 4"
+                loading="lazy" />
+              <div class="gallery-overlay"><i class="bi bi-zoom-in"></i></div
+            ></a>
+          </div>
+          <div class="gallery-item reveal">
+            <a
+              href="asset/img/foto5.JPG"
+              data-toggle="lightbox"
+              data-gallery="prewedd"
+              ><img
+                src="asset/img/thumb/foto5.JPG"
+                alt="E&R 5"
+                loading="lazy" />
+              <div class="gallery-overlay"><i class="bi bi-zoom-in"></i></div
+            ></a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         RSVP
+    ===================================================== -->
+    <section id="rsvp">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: 5rem">
+          <span class="sec-label">Kehadiran Anda</span>
+          <h2 class="sec-title">Konfirmasi Kehadiran</h2>
+          <div class="rule"><span class="rule-dot"></span></div>
+          <p>
+            Mohon isi form di bawah ini untuk mengkonfirmasi kehadiran Anda.
+          </p>
+        </div>
+        <div class="rsvp-form-wrapper reveal">
+          <form
+            id="my-form"
+            method="POST"
+            action="https://script.google.com/macros/s/AKfycbwwNlKq3w2aUQteQ0ZiW7ogst2Phi6QL0GA_XbQoRfvwGqMs21AupGewxtJNdkGe5ij/exec"
+          >
+            <div class="mb-4">
+              <label for="nama" class="form-label">Nama</label
+              ><input
+                type="text"
+                class="form-control"
+                id="nama"
+                name="nama"
+                placeholder="Nama lengkap Anda"
+                required
+              />
+            </div>
+            <div class="mb-4">
+              <label for="jumlah" class="form-label">Jumlah Tamu</label
+              ><input
+                type="number"
+                class="form-control"
+                id="jumlah"
+                name="jumlah"
+                min="1"
+                max="5"
+                value="1"
+              />
+            </div>
+            <div class="mb-4">
+              <label for="status" class="form-label">Konfirmasi</label>
+              <select name="status" id="status" class="form-select">
+                <option value="">Pilih salah satu</option>
+                <option value="Hadir">Hadir</option>
+                <option value="Tidak Hadir">Tidak Hadir</option>
+              </select>
+            </div>
+            <button type="submit" class="rsvp-submit-btn">
+              Kirim Konfirmasi
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- =====================================================
+         GIFTS
+    ===================================================== -->
+    <!-- <section id="gifts">
+      <div class="container">
+        <div class="text-center reveal" style="margin-bottom: 5rem">
+          <span class="sec-label">Ungkap Tanda Kasih</span>
+          <h2 class="sec-title">Kirim Hadiah</h2>
+          <div class="rule"><span class="rule-dot"></span></div>
+          <p>
+            Doa restu Anda merupakan karunia yang sangat berarti. Jika berkenan,
+            Anda dapat mengirim hadiah secara cashless.
+          </p>
+        </div>
+        <div class="row justify-content-center g-4">
+          <div class="col-md-4 reveal">
+            <div class="gift-card" onclick="copyAccount('1276473392020', this)">
+              <p class="bank-name">BCA</p>
+              <p class="account-num">1401567459</p>
+              <p class="account-holder">a.n. Enjel</p>
+              <button class="copy-btn">
+                <i class="bi bi-copy"></i> Salin Nomor
+              </button>
+            </div>
+          </div>
+          <div class="col-md-4 reveal">
+            <div class="gift-card" onclick="copyAccount('1276473392020', this)">
+              <p class="bank-name">Mandiri</p>
+              <p class="account-num">1401435251</p>
+              <p class="account-holder">a.n. Reza</p>
+              <button class="copy-btn">
+                <i class="bi bi-copy"></i> Salin Nomor
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section> -->
+
+    <!-- =====================================================
+         FOOTER
+    ===================================================== -->
+    <footer>
+      <span class="footer-brand">Enjel &amp; Reza</span>
+      <small>&copy; 2026 Enjel &amp; Reza Wedding. All Rights Reserved</small>
+      <small
+        >Design by
+        <a href="https://instagram.com/rifky.ref">rifky.ref</a></small
+      >
+      <ul class="footer-links">
+        <li>
+          <a href="https://instagram.com/rifky.ref"
+            ><i class="bi bi-instagram"></i
+          ></a>
+        </li>
+        <li>
+          <a
+            href="https://www.linkedin.com/in/mohammad-rifki-reza-fahlevi-38434715b"
+            ><i class="bi bi-linkedin"></i
+          ></a>
+        </li>
+      </ul>
+    </footer>
+
+    <audio id="songs" loop>
+      <source
+        src="asset/audio/pernikahan.mp3"
+        type="audio/mp3"
+      />
+    </audio>
+    <button class="audio-btn" id="audioBtn">
+      <i class="bi bi-disc" id="audioIcon"></i>
+    </button>
+    <div class="toast-msg" id="toastMsg"></div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+      crossorigin="anonymous"
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/bs5-lightbox@1.8.3/dist/index.bundle.min.js"></script>
+    <script src="countdown/simplyCountdown.min.js"></script>
+
+    <script>
+      /* COUNTDOWN */
+      document.addEventListener("DOMContentLoaded", () => {
+        simplyCountdown(".simply-countdown", {
+          year: 2026,
+          month: 3,
+          day: 28,
+          hours: 8,
+          minutes: 0,
+          seconds: 0,
+          words: {
+            days: { singular: "hari", plural: "hari" },
+            hours: { singular: "jam", plural: "jam" },
+            minutes: { singular: "menit", plural: "menit" },
+            seconds: { singular: "detik", plural: "detik" },
+          },
+          zeroPad: true,
+          refresh: 1000,
+        });
+      });
+
+      /* URL PARAMS */
+      (() => {
+        const p = new URLSearchParams(window.location.search);
+        const pronoun = p.get("p") || "Bapak/Ibu/Saudara/i";
+        const nama = p.get("nama") || "";
+        document.getElementById("guest-pronoun").textContent = pronoun;
+        if (nama)
+          document.getElementById("guest-name").textContent = nama + ",";
+      })();
+
+      /* HERO ENTRANCE — animasi saat halaman pertama load */
+      document.addEventListener("DOMContentLoaded", () => {
+        anime
+          .timeline({ easing: "easeOutExpo" })
+          .add({
+            targets: ".hiro-to",
+            opacity: [0, 1],
+            translateY: [10, 0],
+            duration: 700,
+            delay: 500,
+          })
+          .add(
+            {
+              targets: ".hiro-line",
+              width: ["0%", "10rem"],
+              opacity: [0, 1],
+              duration: 600,
+            },
+            "-=300",
+          )
+          .add(
+            {
+              targets: ".hiro-names",
+              opacity: [0, 1],
+              translateY: [35, 0],
+              duration: 900,
+            },
+            "-=300",
+          )
+          .add(
+            {
+              targets: ".hiro-invite",
+              opacity: [0, 1],
+              translateY: [10, 0],
+              duration: 600,
+            },
+            "-=650",
+          )
+          .add(
+            {
+              targets: ".hiro-date",
+              opacity: [0, 1],
+              translateY: [10, 0],
+              duration: 600,
+            },
+            "-=600",
+          )
+          .add(
+            {
+              targets: ".hiro-btn",
+              opacity: [0, 1],
+              translateY: [10, 0],
+              duration: 500,
+            },
+            "-=350",
+          );
+        createPetals();
+      });
+
+      /* OPEN INVITATION — scroll ke #home, tampilkan floral & konten */
+      function openInvitation() {
+        /* tampilkan floral corners */
+        anime({
+          targets: [".hiro-floral.fl", ".hiro-floral.fr"],
+          opacity: [0, 1],
+          translateY: [-18, 0],
+          delay: anime.stagger(80, { start: 0 }),
+          easing: "easeOutExpo",
+          duration: 1000,
+        });
+        anime({
+          targets: [".hiro-floral.bl-f", ".hiro-floral.br-f"],
+          opacity: [0, 1],
+          translateY: [18, 0],
+          delay: anime.stagger(80, { start: 80 }),
+          easing: "easeOutExpo",
+          duration: 1000,
+        });
+
+        /* unlock scroll + reveal hero bg */
+        document.body.classList.remove("locked");
+        document.getElementById("hiro").classList.add("revealed");
+        playAudio();
+
+        /* init semua observer setelah dibuka */
+        initScrollReveal();
+        initCountdownObserver();
+        initGalleryObserver();
+
+        /* scroll ke #home setelah sebentar */
+        setTimeout(() => {
+          document
+            .getElementById("home")
+            .scrollIntoView({ behavior: "smooth" });
+        }, 600);
+      }
+
+      /* PETALS */
+      function createPetals() {
+        const c = document.getElementById("petals");
+        const colors = [
+          "rgba(192,80,80,.45)",
+          "rgba(220,110,110,.35)",
+          "rgba(255,255,255,.2)",
+          "rgba(155,32,32,.4)",
+        ];
+        for (let i = 0; i < 16; i++) {
+          const el = document.createElement("div");
+          el.classList.add("petal");
+          const s = Math.random() * 8 + 3;
+          el.style.cssText = `width:${s}px;height:${s}px;left:${Math.random() * 100}%;top:${Math.random() * 100}%;background:${colors[i % colors.length]};`;
+          c.appendChild(el);
+        }
+        anime({
+          targets: ".petal",
+          translateX: () => anime.random(-100, 100),
+          translateY: () => anime.random(-120, 120),
+          rotate: () => anime.random(-260, 260),
+          scale: [0.1, () => Math.random() * 1.1 + 0.3],
+          opacity: [0, 0.7, 0],
+          easing: "easeInOutSine",
+          duration: () => anime.random(4000, 7000),
+          delay: () => anime.random(0, 3500),
+          loop: true,
+        });
+      }
+
+      /* SCROLL REVEAL */
+      function initScrollReveal() {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((e) => {
+              if (!e.isIntersecting) return;
+              anime({
+                targets: e.target,
+                opacity: [0, 1],
+                translateY: [24, 0],
+                easing: "easeOutExpo",
+                duration: 750,
+              });
+              obs.unobserve(e.target);
+            });
+          },
+          { threshold: 0.1 },
+        );
+        document.querySelectorAll(".reveal").forEach((el) => obs.observe(el));
+      }
+
+      /* COUNTDOWN STAGGER */
+      function initCountdownObserver() {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            if (!entries[0].isIntersecting) return;
+            anime({
+              targets: ".simply-section",
+              scale: [0.65, 1],
+              opacity: [0, 1],
+              delay: anime.stagger(110),
+              easing: "easeOutBack",
+              duration: 680,
+            });
+            obs.disconnect();
+          },
+          { threshold: 0.25 },
+        );
+        const el = document.querySelector(".simply-countdown");
+        if (el) obs.observe(el);
+      }
+
+      /* HEART PULSE */
+      const heartIcon = document.querySelector(".couple-divider i");
+      if (heartIcon)
+        setInterval(
+          () =>
+            anime({
+              targets: heartIcon,
+              scale: [1, 1.3, 1],
+              duration: 580,
+              easing: "easeInOutSine",
+            }),
+          2200,
+        );
+
+      /* GALLERY STAGGER */
+      function initGalleryObserver() {
+        const obs = new IntersectionObserver(
+          (entries) => {
+            if (!entries[0].isIntersecting) return;
+            anime({
+              targets: ".gallery-item",
+              opacity: [0, 1],
+              translateY: [22, 0],
+              scale: [0.96, 1],
+              delay: anime.stagger(80),
+              easing: "easeOutExpo",
+              duration: 650,
+            });
+            obs.disconnect();
+          },
+          { threshold: 0.08 },
+        );
+        const g = document.querySelector(".gallery-grid");
+        if (g) obs.observe(g);
+      }
+
+      /* EVENT CARD */
+      document.querySelectorAll(".event-card").forEach((card) => {
+        card.addEventListener("mouseenter", () =>
+          anime({
+            targets: card.querySelector(".event-icon"),
+            rotate: [0, 10, -6, 0],
+            duration: 440,
+            easing: "easeInOutSine",
+          }),
+        );
+      });
+
+      /* AUDIO */
+      const songs = document.getElementById("songs");
+      const audioBtn = document.getElementById("audioBtn");
+      const audioIcon = document.getElementById("audioIcon");
+      let isPlaying = false;
+
+      function playAudio() {
+        songs.volume = 0.28;
+        songs.play().catch(() => {});
+        audioBtn.style.display = "flex";
+        audioBtn.classList.add("playing");
+        isPlaying = true;
+      }
+      audioBtn.addEventListener("click", () => {
+        if (isPlaying) {
+          songs.pause();
+          audioBtn.classList.remove("playing");
+          audioIcon.className = "bi bi-pause-circle";
+        } else {
+          songs.play();
+          audioBtn.classList.add("playing");
+          audioIcon.className = "bi bi-disc";
+        }
+        isPlaying = !isPlaying;
+        anime({
+          targets: audioBtn,
+          scale: [1, 0.82, 1],
+          duration: 280,
+          easing: "easeInOutSine",
+        });
+      });
+
+      /* COPY */
+      function copyAccount(num, el) {
+        navigator.clipboard.writeText(num).then(() => {
+          showToast("Nomor rekening berhasil disalin!");
+          anime({
+            targets: el,
+            scale: [1, 1.03, 1],
+            duration: 320,
+            easing: "easeInOutSine",
+          });
+        });
+      }
+      function showToast(msg) {
+        const t = document.getElementById("toastMsg");
+        t.textContent = msg;
+        t.classList.add("show");
+        setTimeout(() => t.classList.remove("show"), 2600);
+      }
+
+      /* RSVP */
+      window.addEventListener("DOMContentLoaded", () => {
+        const form = document.getElementById("my-form");
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const btn = form.querySelector(".rsvp-submit-btn");
+          btn.textContent = "Mengirim...";
+          btn.disabled = true;
+          fetch(form.action, { method: "POST", body: new FormData(form) })
+            .then(() => {
+              showToast("Konfirmasi berhasil terkirim! 🎉");
+              form.reset();
+            })
+            .catch(() => showToast("Gagal mengirim. Coba lagi."))
+            .finally(() => {
+              btn.textContent = "Kirim Konfirmasi";
+              btn.disabled = false;
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
